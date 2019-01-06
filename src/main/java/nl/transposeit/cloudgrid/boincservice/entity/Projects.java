@@ -39,6 +39,9 @@ public class Projects {
     @Size(min=6, max=192)
     private String projectUrl;
 
+    @Column(name="project_credits")
+    private long projectCredits = 0;
+
     @Column(name="api_key")
     @NotNull(message="Field apiKey missing")
     @Size(min=6, max=192)
@@ -84,5 +87,13 @@ public class Projects {
 
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
+    }
+
+    public long getProjectCredits() {
+        return projectCredits;
+    }
+
+    public void setProjectCredits(long projectCredits) {
+        this.projectCredits = projectCredits;
     }
 }

@@ -40,7 +40,7 @@ public class Workers {
     private int cpus;
 
     @Column(name="memory")
-    private int memory;
+    private long memory;
 
     @Column(name="os_name")
     private String osName;
@@ -97,11 +97,11 @@ public class Workers {
         this.cpus = cpus;
     }
 
-    public int getMemory() {
+    public long getMemory() {
         return memory;
     }
 
-    public void setMemory(int memory) {
+    public void setMemory(long memory) {
         this.memory = memory;
     }
 

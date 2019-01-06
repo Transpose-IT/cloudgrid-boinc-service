@@ -18,61 +18,62 @@ package nl.transposeit.cloudgrid.boincservice.entity;
 */
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-@Table(name="tasks")
+@Table(name = "tasks")
 public class Tasks {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name="id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false, nullable = false)
     private int id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "workers_id")
     private Workers worker;
 
-    @Column(name="project_url")
+    @Column(name = "project_url")
     private String projectUrl;
 
-    @Column(name="wu_name")
+    @Column(name = "wu_name")
     private String wuName;
 
-    @Column(name="state")
+    @Column(name = "state")
     private int state;
 
-    @Column(name="scheduler_state")
+    @Column(name = "scheduler_state")
     private int schedulerSate;
 
-    @Column(name="received_time")
-    private Date receivedTime;
+    @Column(name = "received_time")
+    private float receivedTime;
 
-    @Column(name="report_deadline")
-    private Date reportDeadline;
+    @Column(name = "report_deadline")
+    private float reportDeadline;
 
-    @Column(name="elapsed_time")
+    @Column(name = "elapsed_time")
     private float elapsedTime;
 
-    @Column(name="estimated_time")
+    @Column(name = "estimated_time")
     private float estimatedRemainingTime;
 
-    @Column(name="completed_time")
+    @Column(name = "completed_time")
     private float completedTime;
 
-    @Column(name="ready")
+    @Column(name = "final_elapsed_time")
+    private float finalElapsedTime;
+
+    @Column(name = "ready")
     private boolean readyToReport;
 
     public Tasks() {
         // Needed for DI
     }
 
-    public Tasks(
-            int id, Workers worker, String projectUrl, int state, int schedulerSate, Date receivedTime,
-            Date reportDeadline, float elapsedTime, float estimatedRemainingTime, float completedTime,
-            boolean readyToReport) {
-        this.id = id;
+    public Tasks(Workers worker, String projectUrl, String wuName, int state, int schedulerSate, float receivedTime,
+                 float reportDeadline, float elapsedTime, float estimatedRemainingTime, float completedTime,
+                 float finalElapsedTime, boolean readyToReport) {
         this.worker = worker;
         this.projectUrl = projectUrl;
+        this.wuName = wuName;
         this.state = state;
         this.schedulerSate = schedulerSate;
         this.receivedTime = receivedTime;
@@ -80,6 +81,7 @@ public class Tasks {
         this.elapsedTime = elapsedTime;
         this.estimatedRemainingTime = estimatedRemainingTime;
         this.completedTime = completedTime;
+        this.finalElapsedTime = finalElapsedTime;
         this.readyToReport = readyToReport;
     }
 
@@ -107,6 +109,14 @@ public class Tasks {
         this.projectUrl = projectUrl;
     }
 
+    public String getWuName() {
+        return wuName;
+    }
+
+    public void setWuName(String wuName) {
+        this.wuName = wuName;
+    }
+
     public int getState() {
         return state;
     }
@@ -123,19 +133,19 @@ public class Tasks {
         this.schedulerSate = schedulerSate;
     }
 
-    public Date getReceivedTime() {
+    public float getReceivedTime() {
         return receivedTime;
     }
 
-    public void setReceivedTime(Date receivedTime) {
+    public void setReceivedTime(float receivedTime) {
         this.receivedTime = receivedTime;
     }
 
-    public Date getReportDeadline() {
+    public float getReportDeadline() {
         return reportDeadline;
     }
 
-    public void setReportDeadline(Date reportDeadline) {
+    public void setReportDeadline(float reportDeadline) {
         this.reportDeadline = reportDeadline;
     }
 
@@ -163,19 +173,19 @@ public class Tasks {
         this.completedTime = completedTime;
     }
 
+    public float getFinalElapsedTime() {
+        return finalElapsedTime;
+    }
+
+    public void setFinalElapsedTime(float finalElapsedTime) {
+        this.finalElapsedTime = finalElapsedTime;
+    }
+
     public boolean isReadyToReport() {
         return readyToReport;
     }
 
     public void setReadyToReport(boolean readyToReport) {
         this.readyToReport = readyToReport;
-    }
-
-    public String getWuName() {
-        return wuName;
-    }
-
-    public void setWuName(String wuName) {
-        this.wuName = wuName;
     }
 }

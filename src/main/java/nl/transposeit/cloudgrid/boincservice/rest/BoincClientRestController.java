@@ -17,8 +17,11 @@ package nl.transposeit.cloudgrid.boincservice.rest;
  # along with Cloudgrid.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import nl.transposeit.cloudgrid.boincservice.entity.Projects;
 import nl.transposeit.cloudgrid.boincservice.entity.Tasks;
+import nl.transposeit.cloudgrid.boincservice.repository.ProjectRepository;
 import nl.transposeit.cloudgrid.boincservice.repository.TasksRepository;
+import nl.transposeit.cloudgrid.boincservice.rest.dto.ProjectsDto;
 import nl.transposeit.cloudgrid.boincservice.rest.dto.TasksDto;
 import nl.transposeit.cloudgrid.boincservice.rest.dto.WorkersDto;
 import nl.transposeit.cloudgrid.boincservice.entity.Workers;
@@ -40,6 +43,9 @@ public class BoincClientRestController {
     @Autowired
     private TasksRepository tasksRepository;
 
+    @Autowired
+    private ProjectRepository projectsRepository;
+
     @GetMapping("/client/workers/{hostCPid}")
     public ResponseEntity<WorkersDto> findWorkerByHostCPid(@PathVariable String hostCPid) {
         Optional<Workers> result = workersRepository.getWorkerByHostCPid(hostCPid);
@@ -49,7 +55,7 @@ public class BoincClientRestController {
         }
         return new ResponseEntity<>(new WorkersDto(result.get()), HttpStatus.OK);
     }
-    @PutMapping("/client/workers/")
+    @PutMapping("/client/workers")
     public ResponseEntity<WorkersDto> updateWorkerByHostCPid(@RequestBody Workers worker) {
         Optional<Workers> result = workersRepository.getWorkerByHostCPid(worker.getHostCPid());
 
@@ -73,7 +79,7 @@ public class BoincClientRestController {
         }
         return new ResponseEntity<>(new TasksDto(result.get()), HttpStatus.OK);
     }
-    @PutMapping("/client/tasks/")
+    @PutMapping("/client/tasks")
     public ResponseEntity<TasksDto> updateTaskByWuName(@RequestBody Tasks task) {
         Optional<Tasks> result = tasksRepository.getTaskByWuName(task.getWuName());
 
@@ -87,4 +93,30 @@ public class BoincClientRestController {
 
         return new ResponseEntity<>(new TasksDto(result.get()), HttpStatus.OK);
     }
+
+    @GetMapping("/client/projects/{name}")
+    public ResponseEntity<ProjectsDto> findProjectByName(@PathVariable String projectName) {
+        Optional<Projects> result = projectsRepository.getProjectByProjectName(projectName);
+
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(new ProjectsDto(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ProjectsDto(result.get()), HttpStatus.OK);
+    }
+    @PutMapping("/client/projects")
+    public ResponseEntity<ProjectsDto> updateProjectByName(@RequestBody Projects project) {
+        Optional<Projects> result = projectsRepository.getProjectByProjectName(project.getProjectName());
+
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(new ProjectsDto(), HttpStatus.NOT_FOUND);
+        }
+
+        Projects dbResult = result.get();
+        dbResult.setProjectCredits(project.getProjectCredits());
+        projectsRepository.save(dbResult);
+
+        return new ResponseEntity<>(new ProjectsDto(result.get()), HttpStatus.OK);
+    }
+    
+    
 }

@@ -21,7 +21,10 @@ import nl.transposeit.cloudgrid.boincservice.entity.Projects;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ProjectRepository extends JpaRepository<Projects, Integer> {
 
+    Optional<Projects> getProjectByProjectName(String projectName);
 }
