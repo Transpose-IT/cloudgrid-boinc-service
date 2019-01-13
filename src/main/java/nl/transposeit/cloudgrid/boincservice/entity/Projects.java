@@ -40,14 +40,15 @@ public class Projects {
     private String projectUrl;
 
     @Column(name="project_credits")
-    private long projectCredits = 0;
+    private long projectCredits = 0L;
 
     @Column(name="api_key")
     @NotNull(message="Field apiKey missing")
     @Size(min=6, max=192)
     private String apiKey;
 
-    public Projects () {
+
+    public Projects() {
         // Default constructor needed for DI
     }
 
@@ -95,5 +96,16 @@ public class Projects {
 
     public void setProjectCredits(long projectCredits) {
         this.projectCredits = projectCredits;
+    }
+
+    @Override
+    public String toString() {
+        return "Projects{" +
+                "id=" + id +
+                ", projectName='" + projectName + '\'' +
+                ", projectUrl='" + projectUrl + '\'' +
+                ", projectCredits=" + projectCredits +
+                ", apiKey='" + apiKey + '\'' +
+                '}';
     }
 }
