@@ -51,7 +51,7 @@ public class TasksRestController {
         return new ResponseEntity<>(new TasksDto(project), HttpStatus.OK);
     }
 
-    @DeleteMapping("/tasks/{projectId}")
+    @DeleteMapping("/tasks/{workerId}")
     public ResponseEntity<TasksDto> deleteTask(@PathVariable int workerId) {
         Optional<Tasks> result = tasksRepository.findById(workerId);
 

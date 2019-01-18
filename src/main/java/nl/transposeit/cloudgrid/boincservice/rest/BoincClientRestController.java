@@ -26,6 +26,7 @@ import nl.transposeit.cloudgrid.boincservice.rest.dto.TasksDto;
 import nl.transposeit.cloudgrid.boincservice.rest.dto.WorkersDto;
 import nl.transposeit.cloudgrid.boincservice.entity.Workers;
 import nl.transposeit.cloudgrid.boincservice.repository.WorkersRepository;
+import nl.transposeit.cloudgrid.boincservice.utility.Logging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/v1")
 public class BoincClientRestController {
+
+
+    private Logging logging = new Logging(BoincClientRestController.class);
 
     @Autowired
     private WorkersRepository workersRepository;
@@ -55,17 +59,23 @@ public class BoincClientRestController {
         }
         return new ResponseEntity<>(new WorkersDto(result.get()), HttpStatus.OK);
     }
-    @PutMapping("/client/workers")
+    @PutMapping("/client/workers/{hostCPid}")
     public ResponseEntity<WorkersDto> updateWorkerByHostCPid(@RequestBody Workers worker) {
+        logging.info("Retrieving worker object: " + worker.getHostCPid());
+        logging.debug(worker.toString());
         Optional<Workers> result = workersRepository.getWorkerByHostCPid(worker.getHostCPid());
 
         if (result.isEmpty()) {
+            logging.info("Retrieving worker result: Not found");
             return new ResponseEntity<>(new WorkersDto(), HttpStatus.NOT_FOUND);
         }
 
         Workers dbResult = result.get();
         worker.setId(dbResult.getId());
+
+        logging.info("Saving worker object");
         workersRepository.save(worker);
+        logging.info("Saving worker result: OK");
 
         return new ResponseEntity<>(new WorkersDto(result.get()), HttpStatus.OK);
     }
